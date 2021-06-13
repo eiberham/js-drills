@@ -19,7 +19,7 @@ function parse(format, url) {
       const [key, val] = v.split("=");
       return {
         ...acc,
-        [key]: /^[A-Za-z]+$/.test(val) ? val : parseInt(val),
+        [key]: /^\d+$/.test(val) ? parseInt(val) : val,
       };
     }, {});
 
@@ -35,9 +35,9 @@ function parse(format, url) {
       (acc, val, index) => ({
         ...acc,
         ...(val.includes(":") && {
-          [val.replace(":", "")]: /^[A-Za-z]+$/.test(uri[index])
-            ? uri[index]
-            : parseInt(uri[index]),
+          [val.replace(":", "")]: /^\d+$/.test(uri[index])
+            ? parseInt(uri[index])
+            : uri[index],
         }),
       }),
       query

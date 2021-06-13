@@ -17,7 +17,8 @@ class Animal {
     const phrase = speech
       .split(" ")
       .map((bit) => bit.concat(this.sound))
-      .join("");
+      .join("")
+      .trimEnd();
     return phrase;
   }
 }
