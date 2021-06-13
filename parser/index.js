@@ -4,6 +4,7 @@
  * @param {string } format - the format in which the hash will be built.
  * @param {string} url - the url.
  * @returns {object} - the hashed url instance.
+ * @author Abraham <cedenoabraham@gmail.com>
  */
 function parse(format, url) {
   if (!format || !url)
@@ -11,19 +12,25 @@ function parse(format, url) {
 
   const rgx = new RegExp(/(?<=\?).+/, "g");
 
-  const query = url
-    .match(rgx)
-    .join("")
-    .split("&")
-    .reduce((acc, v) => {
-      const [key, val] = v.split("=");
-      return {
-        ...acc,
-        [key]: /^\d+$/.test(val) ? parseInt(val) : val,
-      };
-    }, {});
+  const query = url.match(rgx)
+    ? url
+        .match(rgx)
+        .join("")
+        .split("&")
+        .reduce((acc, v) => {
+          const [key, val] = v.split("=");
+          return {
+            ...acc,
+            [key]: /^\d+$/.test(val) ? val | 0 : val,
+          };
+        }, {})
+    : {};
 
-  const uri = url
+  let uri = /^https?:\/\/(www\.)?\w+.\w+/g.test(url)
+    ? url.replace(/^https?:\/\/(www\.)?\w+.\w+/g, "")
+    : url;
+
+  uri = uri
     .replace(/(?=\?).+/g, "")
     .split("/")
     .filter((item) => item);
@@ -36,7 +43,7 @@ function parse(format, url) {
         ...acc,
         ...(val.includes(":") && {
           [val.replace(":", "")]: /^\d+$/.test(uri[index])
-            ? parseInt(uri[index])
+            ? uri[index] | 0
             : uri[index],
         }),
       }),

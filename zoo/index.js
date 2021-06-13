@@ -1,5 +1,7 @@
 /**
  * Class representing an animal.
+ *
+ * @author Abraham <cedenoabraham@gmail.com>
  */
 class Animal {
   constructor(sound) {
@@ -27,6 +29,7 @@ class Animal {
  * Subclass representing a lion.
  *
  * @augments Animal
+ * @author Abraham <cedenoabraham@gmail.com>
  */
 class Lion extends Animal {
   constructor(sound) {
@@ -38,6 +41,7 @@ class Lion extends Animal {
  * Subclass that represents a tiger.
  *
  * @augments Animal
+ * @author Abraham <cedenoabraham@gmail.com>
  */
 class Tiger extends Animal {
   constructor(sound) {
