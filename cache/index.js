@@ -20,6 +20,8 @@ class Cache {
       this.options = {
         exp: 3 * 60000,
       };
+    } else {
+      this.options = options;
     }
     this.mem = new Map();
   }
@@ -42,7 +44,7 @@ class Cache {
 
       setTimeout(() => {
         this.mem.delete(key);
-      }, this.options.exp);
+      }, this.options.exp || 3 * 6000);
     } catch (e) {
       console.error(e);
     }
