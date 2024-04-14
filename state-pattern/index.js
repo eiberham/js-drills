@@ -69,6 +69,9 @@ const packet3 = {
  *
  */
 class State {
+  constructor(data) {
+    this.data = data;
+  }
   processPacket(context) {
     throw new Error("This method must be overridden");
   }
@@ -80,10 +83,11 @@ class State {
 class Packet1State extends State {
   processPacket(context) {
     console.log("Processing Packet 1");
+    console.log("context in packet 1: ", this.data);
 
     // Process Packet 1 logic here
     // await this.cache.setNs( `dispenser.${gid}`, { packet: 2 }, { expires : 120 } )
-    context.setState(new Packet2State(context));
+    context.setState(new Packet2State(this.data));
   }
 }
 
@@ -93,9 +97,10 @@ class Packet1State extends State {
 class Packet2State extends State {
   processPacket(context) {
     console.log("Processing Packet 2");
+    console.log("context in packet 2: ", this.data);
     // Process Packet 2 logic here
     // await this.cache.setNs( `dispenser.${gid}`, { packet: 3 }, { expires : 120 } )
-    context.setState(new Packet3State());
+    context.setState(new Packet3State(this.data));
   }
 }
 
@@ -105,8 +110,9 @@ class Packet2State extends State {
 class Packet3State extends State {
   processPacket(context) {
     console.log("Processing Packet 3");
+    console.log("context in packet 3: ", this.data);
     // Process Packet 3 logic here
-    context.setState(new Packet1State());
+    context.setState(new Packet1State(this.data));
     // delete gid from redis
     // await this.cache.removeNs( `dispenser.${gid}` )
   }
@@ -141,6 +147,6 @@ const packets = [packet1, packet2, packet3];
 packets.forEach((packet) => {
   const processor = new PacketProcessor(packet.uart);
   processor.processNextPacket();
-  // processor.processNextPacket();
+  processor.processNextPacket();
   // processor.processNextPacket();
 });
